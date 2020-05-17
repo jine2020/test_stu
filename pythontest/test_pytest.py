@@ -1,26 +1,22 @@
-import pytest,allure,yaml
+import pytest, allure, yaml
 
 from test_stu.pythontest.calc import Calc
+
 
 @allure.feature('计算器')
 class TestCalc():
     def setup(self):
         self.calc = Calc()
 
+    @pytest.mark.add
     @allure.story('两数相加')
     @pytest.mark.parametrize('a,b,result',
-                             yaml.safe_load(open('data.yml')))
+                             yaml.safe_load(open('data.yml'))['add'])
     def test_add(self, a, b, result):
         assert self.calc.add(a, b) == result
 
     @allure.story('两数相除')
-    @pytest.mark.parametrize('a,b,result',
-                             [(0, 0, 'division by zero'), (0, 1, 0), (0, -1, 0),
-                              (1, 1, 1), (-1, -1, 1), (-99999, -99999, 1),
-                              (9999, 9999, 1), (0.1, 0.1, 1),
-                              (-0.1, -0.1, 1), (0, -0.1, 0), (0, 0.1, 0),
-                              (-99999.1, -99999.1, 1),
-                              (9999.1, 9999.1, 1)])
+    @pytest.mark.parametrize('a,b,result', yaml.safe_load(open('data.yml'))['div'])
     @allure.step('运算')
     def test_div(self, a, b, result):
         assert self.calc.div(a, b) == result
@@ -35,13 +31,31 @@ class TestCalc():
         assert self.calc.sub(a, b) == result
 
     @allure.story('两数相乘')
-    @pytest.mark.parametrize('a,b,result',
-                             [(0, 0, 0), (0, 1, 0), (0, -1, 0), (1, 1, 1), (-1, -1,1), (-99999, -99999, 9999800001),
-                              (9999, 9999, 99980001), (0.1, 0.1, 0.01),
-                              (-0.1, -0.1, 0.01), (0, -0.1, 0), (0, 0.1, 0), (-99999.1, -99999.1,9999820000.81),
-                              (9999.1, 9999.1, 99982000.81)])
+    @pytest.mark.parametrize('a,b,result', yaml.safe_load(open('data.yml'))['mul'])
     def test_mul(self, a, b, result):
         assert self.calc.mul(a, b) == result
 
+    @allure.story('两数相乘')
+    @pytest.mark.parametrize('a,b,result', yaml.safe_load(open('data.yml'))['mul'])
+    def test_mul1(self, a, b, result):
+        assert self.calc.mul(a, b) == result
+
+    def steps(self):
+        with open('data.yml') as f:
+            return yaml.safe_load(f)['fangfa']
+
+    @pytest.mark.parametrize('a,b,result', yaml.safe_load(open('data.yml'))['mul'])
+    def test_steps(self, a, b, result):
+        steps1 = self.steps()
+        for step in steps1:
+            if 'mul' == step:
+                results = self.calc.mul(a, b)
+                print(f'mul result==={results}')
+            elif 'mul1' == step:
+                results = self.calc.mul(a, b)
+                print(f'mul1 result==={results}')
+            assert result == results
+
+
 if __name__ == '__main__':
-    pytest.main(['-vs', 'test_pytest.py::TestCalc::test_add'])
+    pytest.main(['-vs', '-k' 'test_pytest.py::TestCalc::test_add'])
