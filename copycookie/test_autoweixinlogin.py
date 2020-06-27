@@ -19,7 +19,7 @@ class TestAutoLogin():
             except:
                 pass
         options = Options()
-        options.debugger_address = "127.0.0.1:9222"
+        options.debugger_address = "127.0.0.1:8000"
         self.driver = webdriver.Chrome(options=options)
         self.driver.get('https://work.weixin.qq.com/wework_admin/frame')
         db = shelve.open('cookies')

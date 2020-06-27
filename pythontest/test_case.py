@@ -1,5 +1,5 @@
 import unittest
-from test_stu.pythontest.calc import Calc
+from test_stu.pythontest.fuction.calc import Calc
 
 
 class TestCal(unittest.TestCase):

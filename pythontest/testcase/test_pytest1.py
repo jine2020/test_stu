@@ -1,6 +1,20 @@
 import pytest, allure, yaml
+from decimal import Decimal
+class Calc():
+    def add(self, a, b):
+        return a + b
 
-from test_stu.pythontest.calc import Calc
+    def div(self, a, b):
+        try:
+            return a / b
+        except:
+            return 'division by zero'
+
+    def sub(self, a, b):
+        return a - b
+
+    def mul(self, a, b):
+        return float(Decimal(str(a)) * Decimal(str(b)))
 
 
 @allure.feature('计算器')
@@ -11,12 +25,12 @@ class TestCalc():
     @pytest.mark.add
     @allure.story('两数相加')
     @pytest.mark.parametrize('a,b,result',
-                             yaml.safe_load(open('data.yml'))['add'])
+                             yaml.safe_load(open('../data.yml'))['add'])
     def test_add(self, a, b, result):
         assert self.calc.add(a, b) == result
 
     @allure.story('两数相除')
-    @pytest.mark.parametrize('a,b,result', yaml.safe_load(open('data.yml'))['div'])
+    @pytest.mark.parametrize('a,b,result', yaml.safe_load(open('../data.yml'))['div'])
     @allure.step('运算')
     def test_div(self, a, b, result):
         assert self.calc.div(a, b) == result
@@ -31,20 +45,20 @@ class TestCalc():
         assert self.calc.sub(a, b) == result
 
     @allure.story('两数相乘')
-    @pytest.mark.parametrize('a,b,result', yaml.safe_load(open('data.yml'))['mul'])
+    @pytest.mark.parametrize('a,b,result', yaml.safe_load(open('../data.yml'))['mul'])
     def test_mul(self, a, b, result):
         assert self.calc.mul(a, b) == result
 
     @allure.story('两数相乘')
-    @pytest.mark.parametrize('a,b,result', yaml.safe_load(open('data.yml'))['mul'])
+    @pytest.mark.parametrize('a,b,result', yaml.safe_load(open('../data.yml'))['mul'])
     def test_mul1(self, a, b, result):
         assert self.calc.mul(a, b) == result
 
     def steps(self):
-        with open('data.yml') as f:
+        with open('../data.yml') as f:
             return yaml.safe_load(f)['fangfa']
 
-    @pytest.mark.parametrize('a,b,result', yaml.safe_load(open('data.yml'))['mul'])
+    @pytest.mark.parametrize('a,b,result', yaml.safe_load(open('../data.yml'))['mul'])
     def test_steps(self, a, b, result):
         steps1 = self.steps()
         for step in steps1:
@@ -58,4 +72,4 @@ class TestCalc():
 
 
 if __name__ == '__main__':
-    pytest.main(['-vs', '-k' 'test_pytest.py::TestCalc::test_add'])
+    pytest.main(['-vs', '-k' 'test_pytest1.py::TestCalc::test_add'])
